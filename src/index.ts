@@ -6,7 +6,7 @@ const app = express();
 app.use(express.json());
 
 app.use('/api/users', userRoutes);
-// git issue
+// git issue 2
 
 
 app.use(errorHandler);
