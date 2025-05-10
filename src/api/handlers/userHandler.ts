@@ -4,6 +4,7 @@ import { checkBlacklist } from '../../lib/karma';
 
 export async function registerUser(req: Request, res: Response, next: NextFunction) {
     const { name, email, phone } = req.body;
+    //rebase
 
     try {
         const blacklisted = await checkBlacklist(email);
