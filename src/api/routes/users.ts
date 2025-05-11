@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { registerUser } from '../handlers/anotherOne';
+import { fakeAuth } from "../../lib/auth";
 
 const router = Router();
 

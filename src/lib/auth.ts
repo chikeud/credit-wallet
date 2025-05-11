@@ -1,4 +1,7 @@
-export function fakeAuth(req, res, next) {
+import { Request, Response, NextFunction } from 'express';
+import { AuthedRequest } from "../types/auth";
+
+export function fakeAuth(req: AuthedRequest, res: Response, next: NextFunction) {
     const token = req.headers.authorization;
     if (!token || !token.startsWith('user-')) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -7,6 +10,6 @@ export function fakeAuth(req, res, next) {
     const userId = parseInt(token.split('-')[1]);
     if (isNaN(userId)) return res.status(401).json({ error: 'Invalid token' });
 
-    req.user = { id: userId };
+    (req as any).userId = userId;
     next();
 }
