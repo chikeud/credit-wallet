@@ -3,7 +3,7 @@ import db from '../../lib/db';
 import { checkBlacklist } from '../../lib/karma';
 
 export async function registerUser(req: Request, res: Response, next: NextFunction) {
-    const { name, email, phone } = req.body;
+    const { name, email } = req.body;
 
     try {
         const blacklisted = await checkBlacklist(email);
@@ -11,7 +11,7 @@ export async function registerUser(req: Request, res: Response, next: NextFuncti
             return res.status(403).json({ error: 'User is blacklisted.' });
         }
 
-        const [userId] = await db('users').insert({ name, email, phone });
+        const [userId] = await db('users').insert({ name, email});
         await db('wallets').insert({ user_id: userId, balance: 0 });
 
         return res.status(201).json({ userId, message: 'User registered successfully' });
