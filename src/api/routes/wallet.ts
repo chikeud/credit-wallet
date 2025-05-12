@@ -1,10 +1,15 @@
 
-import { Router } from 'express';
-import { getWalletBalance } from '../handlers/walletHandler';
+import { RequestHandler, Router} from 'express';
+import { getWalletBalance, fund, withdraw, transfer } from '../handlers/walletHandler';
 import { fakeAuth } from '../../lib/auth';
 
 const router = Router();
 
-//router.get('/balance', fakeAuth, getWalletBalance);
+router.use(fakeAuth);
+
+router.get('/balance',  getWalletBalance as RequestHandler );
+router.post('/fund', fund as RequestHandler);
+router.post('/transfer', transfer as RequestHandler);
+router.post('/withdraw', withdraw as RequestHandler);
 
 export default router;

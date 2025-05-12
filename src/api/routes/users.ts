@@ -1,9 +1,8 @@
-import { Router } from 'express';
-import { registerUser } from '../handlers/anotherOne';
-import { fakeAuth } from "../../lib/auth";
+import {RequestHandler, Router} from 'express';
+import { registerUser } from '../handlers/userHandler';
 
 const router = Router();
 
-router.post('/register', registerUser);
+router.post('/register', registerUser as RequestHandler);
 
 export default router;
