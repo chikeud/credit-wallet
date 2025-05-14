@@ -11,10 +11,10 @@ export async function seed(knex: Knex): Promise<void> {
 
         // Insert users
         await trx('users').insert([
-            { name: 'Richard Magnus', email: 'richard.magnus@example.com' },
-            { name: 'Janet Magnus', email: 'janete.magnus@example.com' },
-            { name: 'Podi Jones', email: 'podijonz@gmail.com' },
-            { name: 'Johnny Bravo', email: 'Jbrav@example.com' }
+            { name: 'Richard Magnus', email: 'richard.magnus@example.com', password_hash: 'password123' },
+            { name: 'Janet Magnus', email: 'janete.magnus@example.com', password_hash: 'password123' },
+            { name: 'Podi Jones', email: 'podijonz@gmail.com', password_hash: 'password123' },
+            { name: 'Johnny Bravo', email: 'Jbrav@example.com', password_hash: 'password123' }
         ]);
 
         // Fetch the ids of the inserted users after commit
