@@ -6,7 +6,7 @@ export const fakeAuth = (req: Request, res: Response, next: NextFunction) => {
 
     if ( token != null ) {
         if (token?.startsWith('user-')) {
-            const userId = token.split('-')[1];
+            const userId = parseInt(token.split('-')[1]);
             req.userId = userId;
             next();
         }

@@ -5,7 +5,7 @@ import { Wallet } from '../../types/wallet';
 
 export async function fund(req: Request, res: Response, next: NextFunction) {
     const { amount } = req.body;
-    const userId = req.userId;
+    const userId: number = req.userId;
 
     try {
         await db('wallets').where({ user_id: userId }).increment('balance', amount);
@@ -20,6 +20,7 @@ export async function transfer(req: Request, res: Response, next: NextFunction) 
     const senderId = req.userId;
 
     const trx = await db.transaction();
+
     try {
         const sender = await trx('wallets').where({ user_id: senderId }).first() as Wallet;
         if (!sender || sender.balance < amount) {
@@ -50,7 +51,7 @@ export async function withdraw(req: Request, res: Response, next: NextFunction) 
 
     const trx = await db.transaction();
     try {
-        const wallet = await db('wallets').where({ user_id: userId }).first() as Wallet;
+        const wallet = await trx('wallets').where({ user_id: userId }).first() as Wallet;  // Use trx for querying
         if (!wallet || wallet.balance < amount) {
             await trx.rollback();
             return res.status(400).json({ error: 'Insufficient funds' });
@@ -65,6 +66,7 @@ export async function withdraw(req: Request, res: Response, next: NextFunction) 
         next(err);
     }
 }
+
 
 
 export async function getWalletBalance(req: Request, res: Response, next: NextFunction) {
