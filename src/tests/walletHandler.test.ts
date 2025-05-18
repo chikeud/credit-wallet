@@ -10,12 +10,10 @@ jest.mock('../lib/db', () => {
         first: jest.fn(),
     }));
 
-    // attach transaction method
     mockDb.transaction = jest.fn();
 
     return mockDb;
 });
-
 
 describe('Wallet Handler', () => {
     let req: Partial<Request & { userId: number }>;
@@ -58,19 +56,52 @@ describe('Wallet Handler', () => {
     });
 
     describe('withdraw', () => {
+        it('should call next on unexpected error during withdraw', async () => {
+            req = {
+                body: { amount: 50 },
+                userId: 1,
+            };
+
+            const trxHandler = {
+                where: jest.fn().mockReturnThis(),
+                first: jest.fn().mockRejectedValue(new Error('DB error')),
+            };
+
+            const trx = Object.assign(
+                jest.fn().mockReturnValue(trxHandler),
+                {
+                    commit: jest.fn(),
+                    rollback: jest.fn(),
+                }
+            );
+
+            (db as any).transaction.mockResolvedValue(trx);
+
+            await withdraw(req as Request, res as Response, next);
+
+            expect(trx.rollback).toHaveBeenCalled();
+            expect(next).toHaveBeenCalledWith(expect.any(Error));
+        });
+
         it('should withdraw if balance is sufficient', async () => {
             req = {
                 body: { amount: 50 },
                 userId: 1,
             };
 
-            const trx = {
+            const trxHandler = {
                 where: jest.fn().mockReturnThis(),
                 first: jest.fn().mockResolvedValue({ id: 1, user_id: 1, balance: 100 }),
                 decrement: jest.fn().mockResolvedValue(undefined),
-                commit: jest.fn(),
-                rollback: jest.fn(),
             };
+
+            const trx = Object.assign(
+                jest.fn().mockReturnValue(trxHandler),
+                {
+                    commit: jest.fn(),
+                    rollback: jest.fn(),
+                }
+            );
 
             (db as any).transaction.mockResolvedValue(trx);
 
@@ -86,13 +117,18 @@ describe('Wallet Handler', () => {
                 userId: 1,
             };
 
-            const trx = {
+            const trxHandler = {
                 where: jest.fn().mockReturnThis(),
                 first: jest.fn().mockResolvedValue({ id: 1, user_id: 1, balance: 100 }),
-                rollback: jest.fn(),
-                decrement: jest.fn(),
-                commit: jest.fn(),
             };
+
+            const trx = Object.assign(
+                jest.fn().mockReturnValue(trxHandler),
+                {
+                    commit: jest.fn(),
+                    rollback: jest.fn(),
+                }
+            );
 
             (db as any).transaction.mockResolvedValue(trx);
 
@@ -105,15 +141,45 @@ describe('Wallet Handler', () => {
     });
 
     describe('transfer', () => {
+        it('should call next on unexpected error during transfer', async () => {
+            req = {
+                body: { recipientId: 2, amount: 50 },
+                userId: 1,
+            };
+
+            const trxHandler = {
+                where: jest.fn().mockImplementation(({ user_id }) => {
+                    if (user_id === 1) throw new Error('DB crash');
+                    return {
+                        first: jest.fn(),
+                    };
+                }),
+            };
+
+            const trx = Object.assign(
+                jest.fn().mockReturnValue(trxHandler),
+                {
+                    rollback: jest.fn(),
+                    commit: jest.fn(),
+                }
+            );
+
+            (db as any).transaction.mockResolvedValue(trx);
+
+            await transfer(req as Request, res as Response, next);
+
+            expect(trx.rollback).toHaveBeenCalled();
+            expect(next).toHaveBeenCalledWith(expect.any(Error));
+        });
+
         it('should transfer funds between users', async () => {
             req = {
                 body: { recipientId: 2, amount: 50 },
                 userId: 1,
             };
 
-            let callCount = 0;
-            const trx = {
-                where: jest.fn().mockImplementation(({ user_id }: any) => {
+            const trxHandler = {
+                where: jest.fn().mockImplementation(({ user_id }) => {
                     return {
                         first: jest.fn().mockResolvedValue(
                             user_id === 1
@@ -126,9 +192,15 @@ describe('Wallet Handler', () => {
                 }),
                 decrement: jest.fn().mockResolvedValue(undefined),
                 increment: jest.fn().mockResolvedValue(undefined),
-                commit: jest.fn(),
-                rollback: jest.fn(),
             };
+
+            const trx = Object.assign(
+                jest.fn().mockReturnValue(trxHandler),
+                {
+                    commit: jest.fn(),
+                    rollback: jest.fn(),
+                }
+            );
 
             (db as any).transaction.mockResolvedValue(trx);
 
@@ -144,21 +216,21 @@ describe('Wallet Handler', () => {
                 userId: 1,
             };
 
-            const trx = {
-                where: jest.fn().mockImplementation(({ user_id }: any) => {
+            const trxHandler = {
+                where: jest.fn().mockImplementation(({ user_id }) => {
                     return {
-                        first: jest.fn().mockResolvedValue(
-                            user_id === 1
-                                ? { id: 1, user_id: 1, balance: 100 }
-                                : undefined
-                        ),
-                        decrement: jest.fn(),
-                        increment: jest.fn(),
+                        first: jest.fn().mockResolvedValue(user_id === 1 ? { id: 1, user_id: 1, balance: 100 } : undefined),
                     };
                 }),
-                commit: jest.fn(),
-                rollback: jest.fn(),
             };
+
+            const trx = Object.assign(
+                jest.fn().mockReturnValue(trxHandler),
+                {
+                    commit: jest.fn(),
+                    rollback: jest.fn(),
+                }
+            );
 
             (db as any).transaction.mockResolvedValue(trx);
 
@@ -175,8 +247,8 @@ describe('Wallet Handler', () => {
                 userId: 1,
             };
 
-            const trx = {
-                where: jest.fn().mockImplementation(({ user_id }: any) => {
+            const trxHandler = {
+                where: jest.fn().mockImplementation(({ user_id }) => {
                     return {
                         first: jest.fn().mockResolvedValue(
                             user_id === 1
@@ -185,9 +257,15 @@ describe('Wallet Handler', () => {
                         ),
                     };
                 }),
-                rollback: jest.fn(),
-                commit: jest.fn(),
             };
+
+            const trx = Object.assign(
+                jest.fn().mockReturnValue(trxHandler),
+                {
+                    commit: jest.fn(),
+                    rollback: jest.fn(),
+                }
+            );
 
             (db as any).transaction.mockResolvedValue(trx);
 
@@ -200,6 +278,20 @@ describe('Wallet Handler', () => {
     });
 
     describe('getWalletBalance', () => {
+        it('should call next on unexpected error in getWalletBalance', async () => {
+            req = { userId: 1 };
+
+            (db as any).mockImplementation(() => ({
+                where: jest.fn().mockReturnValue({
+                    first: jest.fn().mockRejectedValue(new Error('Query failed')),
+                }),
+            }));
+
+            await getWalletBalance(req as Request, res as Response, next);
+
+            expect(next).toHaveBeenCalledWith(expect.any(Error));
+        });
+
         it('should return wallet balance if found', async () => {
             req = { userId: 1 };
 
