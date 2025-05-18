@@ -45,3 +45,6 @@ To run tests:
 ```bash
 npm run test
 ```
+
+## Basic E-R Diagram
+![img.png](img.png)
