@@ -28,6 +28,15 @@ const config: { [key: string]: Knex.Config } = {
             database: process.env.DB_NAME,
         }
     },
+    production: {
+        client: 'mysql2',
+        connection: {
+            host: 'sql.freedb.tech',
+            user: 'freedb_podijonz',
+            password: 'jEBMk2@ey9W4cWB',
+            database: 'freedb_credit-wallet'
+        }
+    }
 
 };
 
