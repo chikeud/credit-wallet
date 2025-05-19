@@ -9,8 +9,6 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/wallet', walletRoutes);
 
-// git issue 3
-
 
 app.use(errorHandler);
 
