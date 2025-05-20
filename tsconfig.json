@@ -3,7 +3,7 @@
     "types": ["express", "node"],
     "target": "ES2020",
     "module": "CommonJS",
-    "rootDir": "./src",
+    //"rootDir": "./src",
     "outDir": "dist",
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "strict": true,
