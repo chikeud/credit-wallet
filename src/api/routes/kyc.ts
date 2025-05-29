@@ -3,6 +3,6 @@ import { verifyIdentity, verifyHandler} from '../handlers/kycHandler';
 
 const router = Router();
 
-router.get('/verify', verifyHandler as RequestHandler);
+router.post('/verify', verifyHandler as RequestHandler);
 
 export default router;

@@ -1,64 +1,128 @@
-import React, { useEffect, useState } from 'react';
-
-type BvnData = {
-    bvn: string;
-    firstname: string;
-    lastname: string;
-    birthdate: string;
-    gender: string;
-    phone: string;
-    photo: string;
-};
-
-type StatusData = {
-    state: string;
-    status: string;
-};
+import React, { useState } from 'react';
+import {
+    Box,
+    Button,
+    TextField,
+    Typography,
+    Paper,
+    CircularProgress,
+} from '@mui/material';
 
 type KycResponse = {
-    bvn: BvnData;
-    verified: StatusData;
+    fullName: string;
+    bvn: {
+        bvn: string;
+        birthdate: string;
+    };
+    dob: string;
+    verified: {
+        state: string,
+        status: string
+    }
 };
 
 export default function Dashboard() {
+    const [form, setForm] = useState({
+        bvn: '',
+        firstname: '',
+        lastname: '',
+    });
     const [kyc, setKyc] = useState<KycResponse | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
-    useEffect(() => {
-        fetch('http://localhost:3000/api/kyc/verify', {
-            headers: {
-                Authorization: 'Bearer-1510', // Replace with your token logic
-            },
-        })
-            .then((res) => res.json())
-            .then((data: KycResponse) => {
-                console.log('KYC data:', data);
-                setKyc(data);
-            })
-            .catch((err) => console.error('Failed to fetch KYC data:', err));
-    }, []);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        setKyc(null);
+
+        try {
+            const res = await fetch('http://localhost:3000/api/kyc/verify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer-1509',
+                },
+                body: JSON.stringify(form),
+            });
+
+            if (!res.ok) throw new Error('Request failed');
+
+            const data = await res.json();
+            setKyc(data);
+        } catch (err) {
+            console.error(err);
+            setError('Failed to fetch KYC data');
+        } finally {
+            setLoading(false);
+        }
+    console.log(form)};
 
     return (
-        <div className="p-6">
-            <h1 className="text-3xl font-bold mb-4">Client KYC Dashboard</h1>
+        <Box p={4}>
+            <Typography variant="h4" gutterBottom>
+                Client KYC Dashboard
+            </Typography>
 
-            {kyc ? (
-                <div className="mt-4 bg-white shadow-md rounded-xl p-6 w-full max-w-xl space-y-3">
-                    <p><strong>Full Name:</strong> {kyc.bvn.firstname} {kyc.bvn.lastname}</p>
-                    <p><strong>BVN:</strong> {kyc.bvn.bvn}</p>
-                    <p><strong>Date of Birth:</strong> {kyc.bvn.birthdate}</p>
-                    <p><strong>Phone:</strong> {kyc.bvn.phone}</p>
-                    <p><strong>Gender:</strong> {kyc.bvn.gender}</p>
-                    <p>
-                        <strong>Verification:</strong>{' '}
-                        <span className={`font-semibold ${kyc.verified.status === 'complete' ? 'text-green-600' : 'text-red-600'}`}>
-              {kyc.verified.status === 'complete' ? 'Verified' : 'Unverified'}
-            </span>
-                    </p>
-                    <p><strong>State:</strong> {kyc.verified.state}</p>
-                </div>
-            ) : (
-                <p className="mt-4">Loading KYC data...</p>
+            <Paper elevation={3} sx={{ p: 3, maxWidth: 500, mb: 4 }}>
+                <form onSubmit={handleSubmit}>
+                    <TextField
+                        fullWidth
+                        label="BVN"
+                        name="bvn"
+                        value={form.bvn}
+                        onChange={handleChange}
+                        margin="normal"
+                        required
+                    />
+                    <TextField
+                        fullWidth
+                        label="First Name"
+                        name="firstname"
+                        value={form.firstname}
+                        onChange={handleChange}
+                        margin="normal"
+                        required
+                    />
+                    <TextField
+                        fullWidth
+                        label="Last Name"
+                        name="lastname"
+                        value={form.lastname}
+                        onChange={handleChange}
+                        margin="normal"
+                        required
+                    />
+                    <Box mt={2}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                            disabled={loading}
+                        >
+                            {loading ? <CircularProgress size={24} /> : 'Verify KYC'}
+                        </Button>
+                    </Box>
+                </form>
+            </Paper>
+
+            {error && <Typography color="error">{error}</Typography>}
+
+            {kyc && (
+                <Paper elevation={3} sx={{ p: 3, maxWidth: 500 }}>
+                    <Typography variant="h6">KYC Result</Typography>
+                    <Typography><strong>Full Name:</strong> {kyc.fullName}</Typography>
+                    <Typography><strong>BVN:</strong> {kyc.bvn.bvn}</Typography>
+                    <Typography><strong>Date of Birth:</strong> {kyc.dob}</Typography>
+                    <Typography><strong>State:</strong> {kyc.verified.state}</Typography>
+                    <Typography><strong>Status:</strong> {kyc.verified.status}</Typography>
+                </Paper>
             )}
-        </div>
+        </Box>
     );
 }
