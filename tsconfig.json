@@ -2,6 +2,7 @@
   "compilerOptions": {
     "types": ["express", "node", "jest"],
     "target": "ES2020",
+
     "module": "CommonJS",
     //"rootDir": "./src",
     "outDir": "dist",

@@ -1,9 +1,9 @@
-import type { Knex } from 'knex';
+import 'ts-node/register'; // Required if you're using TypeScript
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-const config: { [key: string]: Knex.Config } = {
+const config = {
     development: {
         client: 'mysql2',
         connection: {
@@ -17,7 +17,7 @@ const config: { [key: string]: Knex.Config } = {
         },
         seeds: {
             directory: './seeds',
-            extension: 'ts'
+            extension: 'ts',
         },
     },
     test: {
@@ -27,7 +27,7 @@ const config: { [key: string]: Knex.Config } = {
             user: process.env.DB_USER,
             password: process.env.DB_PASS,
             database: process.env.DB_NAME,
-        }
+        },
     },
     production: {
         client: 'mysql2',
@@ -35,10 +35,9 @@ const config: { [key: string]: Knex.Config } = {
             host: 'sql.freedb.tech',
             user: 'freedb_podijonz',
             password: 'jEBMk2@ey9W4cWB',
-            database: 'freedb_credit-wallet'
-        }
-    }
-
+            database: 'freedb_credit-wallet',
+        },
+    },
 };
 
 export default config;

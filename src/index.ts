@@ -1,16 +1,24 @@
+import cors from 'cors';
 import express from 'express';
-import userRoutes from './api/routes/users';
-import walletRoutes from './api/routes/wallet';
+import riskRoutes from './api/routes/risk';
+import scoringRoutes from './api/routes/scoring';
+import kycRoutes from './api/routes/kyc';
 import { errorHandler } from './utils/errorHandler';
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
-app.use('/api/users', userRoutes);
-app.use('/api/wallet', walletRoutes);
 
+app.use('/api/risk', riskRoutes);
+app.use('/api/scoring', scoringRoutes);
+app.use('/api/kyc', kycRoutes);
 
 app.use(errorHandler);
+
+// Serve React Frontend
+//app.use(express.static('../client/dist'));
+//app.get('*', (_, res) => res.sendFile('index.html', { root: '../client/dist' }));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
