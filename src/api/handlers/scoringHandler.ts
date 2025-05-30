@@ -21,7 +21,7 @@ export const calculateScore = async (accessToken: string, accountId: string) => 
 export const scoringHandler = async (req, res) => {
     const authHeader = req.headers.authorization;
 
-    if (typeof authHeader !== 'string' || !authHeader.startsWith('Bearer ')) {
+    if (typeof authHeader !== 'string' || !authHeader.startsWith('Bearer-')) {
         return res.status(401).json({ error: 'Missing or invalid Authorization header' });
     }
 

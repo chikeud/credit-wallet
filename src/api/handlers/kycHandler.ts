@@ -30,9 +30,9 @@ export const verifyHandler = async (req: Request, res: Response) => {
 
     try {
         const result = await verifyIdentity(user);
-        return res.status(200).json(result);
+        res.status(200).json(result);
     } catch (error) {
         console.error('Error verifying identity:', error);
-        return res.status(500).json({ error: `${error}` });
+        res.status(500).json({ error: `${error}` });
     }
 };

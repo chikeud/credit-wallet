@@ -1,5 +1,5 @@
-import express, {Request, Router, Response, RequestHandler} from 'express';
-import { verifyIdentity, verifyHandler} from '../handlers/kycHandler';
+import  {Router, RequestHandler} from 'express';
+import {  verifyHandler } from '../handlers/kycHandler';
 
 const router = Router();
 

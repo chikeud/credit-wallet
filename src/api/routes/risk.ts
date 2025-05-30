@@ -1,4 +1,4 @@
-import express, {Request, Router, Response, RequestHandler} from 'express';
+import { Router, RequestHandler} from 'express';
 import { handleRisk } from '../handlers/riskHandler';
 
 const router = Router();
