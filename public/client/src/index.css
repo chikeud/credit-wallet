@@ -10,3 +10,9 @@ body {
 a {
     @apply text-blue-600 hover:text-blue-800 underline;
 }
+html, body, #root {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #121212; /* Match your dark theme */
+}
