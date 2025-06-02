@@ -1,40 +1,118 @@
 import { Knex } from 'knex';
 
 export async function seed(knex: Knex): Promise<void> {
-    // Start a transaction for users and wallets insertion
     const trx = await knex.transaction();
 
     try {
-        // Delete all existing data in both tables to avoid conflicts
-        await trx('wallets').delete();
-        await trx('users').delete();
+        await trx('identities').delete();
 
-        // Insert users
-        await trx('users').insert([
-            { name: 'Richard Magnus', email: 'richard.magnus@example.com', password_hash: 'password123' },
-            { name: 'Janet Magnus', email: 'janete.magnus@example.com', password_hash: 'password123' },
-            { name: 'Podi Jones', email: 'podijonz@gmail.com', password_hash: 'password123' },
-            { name: 'Johnny Bravo', email: 'Jbrav@example.com', password_hash: 'password123' }
+        await trx('identities').insert([
+            {
+                id: 1507,
+                applicant: JSON.stringify({ firstname: "Bunch", lastname: "Dillon" }),
+                summary: JSON.stringify({
+                    bvn_check: {
+                        status: "EXACT_MATCH",
+                        fieldMatches: { firstname: true, lastname: true }
+                    }
+                }),
+                status: JSON.stringify({ state: "complete", status: "verified" }),
+                bvn: JSON.stringify({
+                    bvn: "95888168924",
+                    firstname: "Bunch",
+                    lastname: "Dillon",
+                    birthdate: "07-07-1995",
+                    gender: "Male",
+                    phone: "08000000000",
+                    photo: "/9j/4AAQSkZJRgABAgAAAQABAAD/***/wCpiNUFoooEf//Z"
+                })
+            },
+            {
+                id: 1508,
+                applicant: JSON.stringify({ firstname: "Alice", lastname: "Johnson" }),
+                summary: JSON.stringify({
+                    bvn_check: {
+                        status: "NO_MATCH",
+                        fieldMatches: { firstname: false, lastname: false }
+                    }
+                }),
+                status: JSON.stringify({ state: "pending", status: "unverified" }),
+                bvn: JSON.stringify({
+                    bvn: "84736291847",
+                    firstname: "Alice",
+                    lastname: "Johnson",
+                    birthdate: "12-05-1988",
+                    gender: "Female",
+                    phone: "08011112222",
+                    photo: "/9j/4AAQSkZJRgABAQEASABIAAD/***/Z"
+                })
+            },
+            {
+                id: 1509,
+                applicant: JSON.stringify({ firstname: "Carlos", lastname: "Smith" }),
+                summary: JSON.stringify({
+                    bvn_check: {
+                        status: "PARTIAL_MATCH",
+                        fieldMatches: { firstname: true, lastname: false }
+                    }
+                }),
+                status: JSON.stringify({ state: "review", status: "pending" }),
+                bvn: JSON.stringify({
+                    bvn: "93847561029",
+                    firstname: "Carlos",
+                    lastname: "Smith",
+                    birthdate: "23-11-1990",
+                    gender: "Male",
+                    phone: "08022223333",
+                    photo: "/9j/4AAQSkZJRgABAgAAAQABAAD/***/abcEf//Z"
+                })
+            },
+            {
+                id: 1510,
+                applicant: JSON.stringify({ firstname: "Diana", lastname: "Brown" }),
+                summary: JSON.stringify({
+                    bvn_check: {
+                        status: "EXACT_MATCH",
+                        fieldMatches: { firstname: true, lastname: true }
+                    }
+                }),
+                status: JSON.stringify({ state: "complete", status: "verified" }),
+                bvn: JSON.stringify({
+                    bvn: "10293847566",
+                    firstname: "Diana",
+                    lastname: "Brown",
+                    birthdate: "15-03-1992",
+                    gender: "Female",
+                    phone: "08033334444",
+                    photo: "/9j/4AAQSkZJRgABAQEASABIAAD/***/xyzEf//Z"
+                })
+            },
+            {
+                id: 1511,
+                applicant: JSON.stringify({ firstname: "Ethan", lastname: "Williams" }),
+                summary: JSON.stringify({
+                    bvn_check: {
+                        status: "NO_MATCH",
+                        fieldMatches: { firstname: false, lastname: false }
+                    }
+                }),
+                status: JSON.stringify({ state: "failed", status: "rejected" }),
+                bvn: JSON.stringify({
+                    bvn: "56473829102",
+                    firstname: "Ethan",
+                    lastname: "Williams",
+                    birthdate: "30-08-1985",
+                    gender: "Male",
+                    phone: "08044445555",
+                    photo: "/9j/4AAQSkZJRgABAQEASABIAAD/***/efgEf//Z"
+                })
+            }
         ]);
 
-        // Fetch the ids of the inserted users after commit
-        const users = await trx('users').select('id');  // Collect the inserted user ids
-
-        // Commit the transaction after users are successfully inserted
         await trx.commit();
-
-        // Now use the user ids for wallet insertion
-        await knex('wallets').insert([
-            { user_id: users[0].id, balance: 100.00 }, // Richard Magnus
-            { user_id: users[1].id, balance: 50.00 },  // Janet Magnus
-            { user_id: users[2].id, balance: 1000000.00 }, // Podi Jones
-            { user_id: users[3].id, balance: 50.00 }   // Johnny Bravo
-        ]);
-
         console.log('Seeding completed successfully.');
 
     } catch (error) {
-        // Rollback if any errors occur
         console.error('Error during seeding:', error);
         await trx.rollback();
         throw error;
