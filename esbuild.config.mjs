@@ -9,13 +9,18 @@ esbuild.build({
     format: 'esm',
     sourcemap: true,
     external: [
-        'mysql',
+        'express',
+        'knex',
         'pg',
-        'pg-query-stream',
-        'better-sqlite3',
-        'sqlite3',
-        'oracledb',
-        'tedious',
+        'mysql',
+        'fs',
+        'path',
+        'events', // <- key here
+        'node:events',
+        'node:path',
+        'node:fs',
+        'node:*',  // wildcard for any other node:* modules
+        ...Object.keys(require('./package.json').dependencies)
     ],
     logLevel: 'info',
 }).catch(() => process.exit(1));
