@@ -2,9 +2,12 @@
   "name": "credit-wallet",
   "version": "1.0.0",
   "main": "dist/src/index.cjs",
+  "workspaces": [
+    "public/client"
+  ],
   "scripts": {
     "dev": "nodemon --watch src --exec 'vite-node' src/index.ts",
-    "build": "npm run build:client && npm run build:server",
+    "build": "npm run build --workspace=public/client && tsc",
     "build:client": "cd public/client && npm install && npm run build",
     "build:server": "tsc",
     "start": "node dist/src/index.js",

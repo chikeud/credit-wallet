@@ -33,7 +33,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm install && npm run build"
   },
   "proxy": {
     "/api": {
