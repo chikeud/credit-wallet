@@ -4,7 +4,8 @@
   "main": "dist/src/index.cjs",
   "scripts": {
     "dev": "nodemon --watch src --exec 'vite-node' src/index.ts",
-    "build": "tsc && cd public/client && npm install && npm run build",
+    "build:client": "cd public/client && npm install && npm run build",
+    "build:server": "tsc",
     "start": "node dist/src/index.js",
     "heroku-postbuild": "npm run build",
     "test": "jest --coverage"
@@ -44,5 +45,8 @@
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
     "vite-node": "^3.1.4"
+  },
+  "engines": {
+    "node": "22.3"
   }
 }
