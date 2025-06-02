@@ -8,10 +8,10 @@
   ],
   "scripts": {
     "dev": "nodemon --watch src --exec 'vite-node' src/index.ts",
-    "build": "tsc && cp dist/knexfile.js knexfile.js",
+    "build": "tsc",
     "start": "node dist/src/index.js",
     "heroku-postbuild": "npm run build",
-    "migrate": "node dist/knexfile.js",
+    "migrate": "node knexfile.mjs",
     "test": "jest --coverage"
   },
   "keywords": [],
