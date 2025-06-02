@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "dev": "nodemon --watch src --exec 'vite-node' src/index.ts",
-    "build": "tsc && cp dist/knexfile.js",
+    "build": "tsc && cp dist/knexfile.js knexfile.js",
     "start": "node dist/src/index.js",
     "heroku-postbuild": "npm run build",
     "migrate": "knex migrate:latest --knexfile knexfile.js",
