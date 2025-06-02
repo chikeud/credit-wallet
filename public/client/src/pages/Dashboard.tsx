@@ -14,7 +14,7 @@ import {
     createTheme,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import SharedNavBar, { NavItem } from './components/SharedNavBar';
+import SharedNavBar, { NavItem } from './components/SharedNavBar.tsx';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import BadgeIcon from '@mui/icons-material/Badge';

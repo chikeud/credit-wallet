@@ -36,7 +36,7 @@ import {
     Legend,
 } from 'recharts';
 
-import SharedNavBar from './components/SharedNavbar';
+import SharedNavBar from './components/SharedNavbar.tsx';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import BadgeIcon from '@mui/icons-material/Badge';

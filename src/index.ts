@@ -17,14 +17,6 @@ app.use('/api/kyc', kycRoutes);
 
 app.use(errorHandler);
 
-// Serve static files from frontend build folder
-app.use(express.static(path.join(__dirname, '../../public/client/dist')));
-
-app.get('*', (req, res) => {
-   res.sendFile(path.join(__dirname, '../../public/client/dist/index.html'));
-});
-
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
