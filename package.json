@@ -27,7 +27,8 @@
     "mysql2": "^3.14.1",
     "recharts": "^2.15.3",
     "ts-jest": "^29.3.3",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "knex": "^3.1.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.18",
