@@ -1,10 +1,15 @@
 import { Request, Response } from 'express';
 import db from '../../lib/db';
-import dayjs from 'dayjs';
 import { Identity } from '../../types/identity';
 
 export const verifyIdentity = async (user: { bvn: string; firstname: string; lastname: string, dob: string}) => {
-    const formattedDob = dayjs(user.dob).format('DD-MM-YYYY');
+    const dob = new Date(user.dob);
+
+    const day = String(dob.getDate()).padStart(2, '0');
+    const month = String(dob.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const year = dob.getFullYear();
+
+    const formattedDob = `${day}-${month}-${year}`;
 
     const identity = await db('identities')
         .whereRaw("JSON_EXTRACT(bvn, '$.bvn') = ?", [user.bvn])
