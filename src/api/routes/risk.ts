@@ -1,8 +1,8 @@
 import { Router, RequestHandler} from 'express';
 import { handleRisk } from '../handlers/riskHandler';
 
-const router = Router();
+const riskRouter = Router();
 
-router.get('/:accountId', handleRisk as RequestHandler);
+riskRouter.get('/:accountId', handleRisk as RequestHandler);
 
-export default router;
+export default riskRouter;

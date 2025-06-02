@@ -1,8 +1,8 @@
 import  {Router, RequestHandler} from 'express';
 import {  verifyHandler } from '../handlers/kycHandler';
 
-const router = Router();
+const kycRouter = Router();
 
-router.post('/verify', verifyHandler as RequestHandler);
+kycRouter.post('/verify', verifyHandler as RequestHandler);
 
-export default router;
+export default kycRouter;

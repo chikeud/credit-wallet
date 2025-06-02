@@ -1,8 +1,8 @@
 import  { Router, RequestHandler} from 'express';
 import {scoringHandler} from "../handlers/scoringHandler";
 
-const router = Router();
+const scoringRouter = Router();
 
-router.get('/:accountId', scoringHandler as RequestHandler);
+scoringRouter.get('/:accountId', scoringHandler as RequestHandler);
 
-export default router;
+export default scoringRouter;

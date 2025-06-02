@@ -1,5 +1,5 @@
+
 import cors from 'cors';
-import path from 'path';
 import express from 'express';
 import riskRoutes from './api/routes/risk';
 import scoringRoutes from './api/routes/scoring';

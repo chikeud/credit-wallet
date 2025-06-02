@@ -1,21 +1,20 @@
 {
   "compilerOptions": {
     "types": ["express", "node", "jest"],
-    "target": "ES2020",
-
     "module": "CommonJS",
-    "rootDirs": ["src", "seeds"],
-    "outDir": "dist",
+    "target": "ES2020",
+    //"rootDirs": ["src", "seeds"],
+    "outDir": "./dist",
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "isolatedModules": true,
     "noImplicitAny": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "resolveJsonModule": true
   },
   "include": ["src/**/*.ts",  "seeds/**/*"],
-  "exclude": ["src/tests/**/*", "node_modules"],
-  "ts-node": {
-    "esm": true
-  }
+  "exclude": ["**/*.js","src/tests/**/*", "node_modules"],
 }
