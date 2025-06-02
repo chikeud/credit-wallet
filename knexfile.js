@@ -1,7 +1,11 @@
-// knexfile.js (ESM)
-import dotenv from 'dotenv';
-dotenv.config();
-
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+require("ts-node/register"); // Required if you're using TypeScript
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 const config = {
     development: {
         client: 'mysql2',
@@ -12,14 +16,14 @@ const config = {
             database: process.env.DB_NAME,
         },
         migrations: {
+            extension: 'js',
             directory: './migrations',
         },
         seeds: {
             directory: './seeds',
-            extension: 'js', // changed from 'ts' to 'js' for JS compatibility
+            extension: 'ts',
         },
     },
-
     test: {
         client: 'mysql2',
         connection: {
@@ -29,7 +33,6 @@ const config = {
             database: process.env.DB_NAME,
         },
     },
-
     production: {
         client: 'mysql2',
         connection: {
@@ -40,5 +43,4 @@ const config = {
         },
     },
 };
-
-export default config;
+exports.default = config;
