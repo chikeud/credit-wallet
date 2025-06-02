@@ -16,7 +16,7 @@ const config = {
             database: process.env.DB_NAME,
         },
         migrations: {
-            extension: 'js',
+            extension: 'ts',
             directory: './migrations',
         },
         seeds: {

@@ -11,7 +11,7 @@
     "build": "tsc",
     "start": "node dist/src/index.js",
     "heroku-postbuild": "npm run build",
-    "migrate": "node knexfile.mjs",
+    "migrate": "node knexfile.cjs",
     "test": "jest --coverage"
   },
   "keywords": [],
