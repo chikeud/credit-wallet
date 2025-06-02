@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["express", "node", "jest"],
+    "types": ["express", "node"],
     "target": "ES2020",
     "module": "CommonJS",
     "rootDir": "./",
