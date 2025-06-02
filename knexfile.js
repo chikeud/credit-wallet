@@ -1,6 +1,5 @@
-import 'ts-node/register'; // Required if you're using TypeScript
+// knexfile.js (ESM)
 import dotenv from 'dotenv';
-
 dotenv.config();
 
 const config = {
@@ -13,14 +12,14 @@ const config = {
             database: process.env.DB_NAME,
         },
         migrations: {
-            extension: 'js',
             directory: './migrations',
         },
         seeds: {
             directory: './seeds',
-            extension: 'ts',
+            extension: 'js', // changed from 'ts' to 'js' for JS compatibility
         },
     },
+
     test: {
         client: 'mysql2',
         connection: {
@@ -30,9 +29,9 @@ const config = {
             database: process.env.DB_NAME,
         },
     },
+
     production: {
         client: 'mysql2',
-
         connection: {
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
