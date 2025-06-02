@@ -4,7 +4,6 @@ import express from 'express';
 import riskRoutes from './api/routes/risk';
 import scoringRoutes from './api/routes/scoring';
 import kycRoutes from './api/routes/kyc';
-import bodyParser from 'body-parser';
 import { errorHandler } from './utils/errorHandler';
 
 const app = express();
