@@ -1,26 +1,27 @@
 import esbuild from 'esbuild';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const pkg = require('./package.json');
 
 esbuild.build({
     entryPoints: ['src/index.ts'],
-    bundle: true,
+    bundle: true, // <- ✅ Don't bundle
     platform: 'node',
     target: ['node22'],
-    outfile: 'dist/src/index.js',
-    format: 'esm',
+    outdir: 'dist/src/index.js', // <- if you want all files, not a single outfile
+    format: 'cjs',
     sourcemap: true,
     external: [
+        ...Object.keys(pkg.dependencies),
         'express',
         'knex',
         'pg',
         'mysql',
         'fs',
         'path',
-        'events', // <- key here
-        'node:events',
-        'node:path',
-        'node:fs',
-        'node:*',  // wildcard for any other node:* modules
-        ...Object.keys(require('./package.json').dependencies)
+        'url',
+        'events',
+        'node:*'
     ],
     logLevel: 'info',
 }).catch(() => process.exit(1));

@@ -2,7 +2,7 @@
   "name": "credit-wallet",
   "type": "module",
   "version": "1.0.0",
-  "main": "dist/src/index.js",
+  "main": "dist/src/index.cjs",
   "scripts": {
     "dev": "nodemon --watch src --exec 'vite-node' src/index.ts",
     "build": "node esbuild.config.mjs",
