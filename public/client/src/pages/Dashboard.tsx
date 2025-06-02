@@ -52,7 +52,7 @@ function DashboardContent() {
         setError('');
         setKyc(null);
 
-        console.log(form);
+        //console.log(form);
 
         try {
             const res = await fetch('http://localhost:3000/api/kyc/verify', {

@@ -17,17 +17,13 @@ app.use('/api/kyc', kycRoutes);
 
 app.use(errorHandler);
 
-// Serve React Frontend
-//app.use(express.static('../client/dist'));
-//app.get('*', (_, res) => res.sendFile('index.html', { root: '../client/dist' }));
-// Serve static files from frontend build
-const clientBuildPath = path.join(__dirname, '../public/client/dist');
-//app.use(express.static('../public/client/dist'));
+// Serve static files from frontend build folder
+app.use(express.static(path.join(__dirname, '../../public/client/dist')));
 
-// Catch-all route to serve index.html for SPA routes
-//app.get('*', (_, res) => {
-  //  res.sendFile('../public/client/dist');
-//});
+app.get('*', (req, res) => {
+   res.sendFile(path.join(__dirname, '../../public/client/dist/index.html'));
+});
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
