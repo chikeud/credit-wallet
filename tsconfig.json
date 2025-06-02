@@ -3,7 +3,7 @@
     "types": ["express", "node", "jest"],
     "target": "ES2020",
     "module": "CommonJS",
-    //"rootDir": "./src",
+    "rootDir": "./",
     "outDir": "dist",
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "strict": true,
@@ -12,6 +12,6 @@
     "skipLibCheck": true,
     "moduleResolution": "node"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "knexfile.ts"],
   "exclude": ["src/tests/**/*", "node_modules"]
 }

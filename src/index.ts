@@ -1,14 +1,18 @@
 import express from 'express';
-import userRoutes from './api/routes/users';
-import walletRoutes from './api/routes/wallet';
+import cors from 'cors';
+import riskRoutes from './api/routes/risk_route';
+import scoringRoutes from './api/routes/scoring_route';
+import kycRoutes from './api/routes/kyc_route';
 import { errorHandler } from './utils/errorHandler';
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
-app.use('/api/users', userRoutes);
-app.use('/api/wallet', walletRoutes);
 
+app.use('/api/risk', riskRoutes);
+app.use('/api/scoring', scoringRoutes);
+app.use('/api/kyc', kycRoutes);
 
 app.use(errorHandler);
 
