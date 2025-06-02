@@ -11,7 +11,7 @@
     "build": "tsc && cp dist/knexfile.js knexfile.js",
     "start": "node dist/src/index.js",
     "heroku-postbuild": "npm run build",
-    "migrate": "knex migrate:latest --knexfile knexfile.js",
+    "migrate": "node dist/knexfile.js",
     "test": "jest --coverage"
   },
   "keywords": [],
