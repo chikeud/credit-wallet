@@ -2,19 +2,35 @@ import { analyzeRisk } from './riskHandler';
 
 export const calculateScore = async (accessToken: string, accountId: string) => {
     const risk = await analyzeRisk(accessToken, accountId);
+    const incomeScore = Math.min(risk.totalCredits / 500000, 1) * 25; // full score if > 500k
+    const disposableIncomeScore = Math.min(risk.disposableIncomeRatio, 1) * 25; // full score if 100% surplus
+
+    const gamblingPenalty = risk.gamblingTxCount === 0 ? 20 : risk.gamblingTxCount <= 2 ? 10 : 0;
+    const largeCashPenalty = risk.largeCashCreditsCount === 0 ? 15 : risk.largeCashCreditsCount <= 2 ? 10 : 5;
+    const reversalPenalty = risk.reversalsCount === 0 ? 15 : risk.reversalsCount <= 2 ? 10 : 5;
+
+
+    const totalScore =
+        incomeScore +
+        disposableIncomeScore +
+        gamblingPenalty +
+        largeCashPenalty +
+        reversalPenalty;
+
+    //console.log(largeCashPenalty);
 
     const scoreBreakdown = {
-        incomeScore: risk.totalCredits > 300000 ? 20 : 10,
-        disposableIncomeScore: risk.disposableIncomeRatio > 0.3 ? 20 : 10,
-        gamblingPenalty: risk.gamblingTxCount > 0 ? -10 : 0,
-        largeCashPenalty: risk.largeCashCreditsCount > 2 ? -10 : 0,
-        reversalPenalty: risk.reversalsCount > 2 ? -5 : 0,
+        incomeScore,
+        disposableIncomeScore,
+        gamblingPenalty,
+        largeCashPenalty,
+        reversalPenalty
     };
 
-    const totalScore = Object.values(scoreBreakdown).reduce((sum, v) => sum + v, 50); // Base 50
+    //const totalScore = Object.values(scoreBreakdown).reduce((sum, v) => sum + v, 50); // Base 50
 
     return {
-        score: Math.max(0, Math.min(100, totalScore)),
+        score: parseFloat(Math.max(0, Math.min(100, totalScore)).toFixed(2)),
         breakdown: scoreBreakdown,
     };
 };

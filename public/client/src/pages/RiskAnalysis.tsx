@@ -189,7 +189,7 @@ function RiskAnalysisContent() {
                                     gap={3}
                                     mb={4}
                                 >
-                                    <Card sx={{ flex: 1, borderRadius: '30px' }}>
+                                    <Card sx={{ flex: 1, borderRadius: '20px' }}>
                                         <CardContent
                                             sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}
                                         >
@@ -202,7 +202,7 @@ function RiskAnalysisContent() {
                                         </CardContent>
                                     </Card>
 
-                                    <Card sx={{ flex: 1, borderRadius: '30px' }}>
+                                    <Card sx={{ flex: 1, borderRadius: '20px' }}>
                                         <CardContent
                                             sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}
                                         >

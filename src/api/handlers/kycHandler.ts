@@ -1,13 +1,16 @@
 import { Request, Response } from 'express';
 import db from '../../lib/db';
-import { IdentityResponse } from '../../types/response';
+import dayjs from 'dayjs';
 import { Identity } from '../../types/identity';
 
-export const verifyIdentity = async (user: { bvn: string; firstname: string; lastname: string }) => {
+export const verifyIdentity = async (user: { bvn: string; firstname: string; lastname: string, dob: string}) => {
+    const formattedDob = dayjs(user.dob).format('DD-MM-YYYY');
+
     const identity = await db('identities')
         .whereRaw("JSON_EXTRACT(bvn, '$.bvn') = ?", [user.bvn])
         .andWhereRaw("JSON_EXTRACT(bvn, '$.firstname') = ?", [user.firstname])
         .andWhereRaw("JSON_EXTRACT(bvn, '$.lastname') = ?", [user.lastname])
+        .andWhereRaw("JSON_EXTRACT(bvn, '$.birthdate') = ?", [formattedDob])
         .first() as Identity;
 
     if (!identity) throw new Error('Identity not found');

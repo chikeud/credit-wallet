@@ -35,7 +35,7 @@ type KycResponse = {
 };
 
 function DashboardContent() {
-    const [form, setForm] = useState({ bvn: '', firstname: '', lastname: '' });
+    const [form, setForm] = useState({ bvn: '', firstname: '', lastname: '', dob: '' });
     const [kyc, setKyc] = useState<KycResponse | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -51,6 +51,8 @@ function DashboardContent() {
         setLoading(true);
         setError('');
         setKyc(null);
+
+        console.log(form);
 
         try {
             const res = await fetch('http://localhost:3000/api/kyc/verify', {
@@ -68,7 +70,7 @@ function DashboardContent() {
             setKyc(data);
         } catch (err) {
             console.error(err);
-            setError('Failed to fetch KYC data');
+                setError('Invalid/Incomplete KYC data');
         } finally {
             setLoading(false);
         }
@@ -116,6 +118,19 @@ function DashboardContent() {
                                 margin="normal"
                                 required
                             />
+                            <TextField
+                                fullWidth
+                                label="Date of Birth"
+                                name="dob"
+                                type="date"
+                                value={form.dob}
+                                onChange={handleChange}
+                                margin="normal"
+                                required
+                                InputLabelProps={{
+                                    shrink: true, // ensures label stays above the date input
+                                }}
+                            />
                             <Box mt={2}>
                                 <Button
                                     variant="contained"
@@ -129,6 +144,7 @@ function DashboardContent() {
                             </Box>
                         </form>
                     </Paper>
+
 
                     {error && (
                         <Typography color="error" textAlign="center" mb={2}>
