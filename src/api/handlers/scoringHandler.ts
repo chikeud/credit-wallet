@@ -6,7 +6,7 @@ export const calculateScore = async (accessToken: string, accountId: string) => 
     const incomeScore = Math.min(risk.totalCredits / 500000, 1) * 25; // full score if > 500k
     const disposableIncomeScore = Math.min(risk.disposableIncomeRatio, 1) * 25; // full score if 100% surplus
 
-    const gamblingPenalty = risk.gamblingTxCount === 0 ? 20 : risk.gamblingTxCount <= 2 ? 10 : 0;
+    const gamblingScore = risk.gamblingTxCount === 0 ? 20 : risk.gamblingTxCount <= 2 ? 10 : 0;
     const largeCashPenalty = risk.largeCashCreditsCount === 0 ? 15 : risk.largeCashCreditsCount <= 2 ? 10 : 5;
     const reversalPenalty = risk.reversalsCount === 0 ? 15 : risk.reversalsCount <= 2 ? 10 : 5;
 
@@ -14,7 +14,7 @@ export const calculateScore = async (accessToken: string, accountId: string) => 
     const totalScore =
         incomeScore +
         disposableIncomeScore +
-        gamblingPenalty +
+        gamblingScore +
         largeCashPenalty +
         reversalPenalty;
 
@@ -23,7 +23,7 @@ export const calculateScore = async (accessToken: string, accountId: string) => 
     const scoreBreakdown = {
         incomeScore,
         disposableIncomeScore,
-        gamblingPenalty,
+        gamblingScore,
         largeCashPenalty,
         reversalPenalty
     };
