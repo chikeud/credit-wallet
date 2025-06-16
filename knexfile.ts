@@ -7,10 +7,10 @@ const config: { [key: string]: Knex.Config } = {
     development: {
         client: 'mysql2',
         connection: {
-            host: 'sql.freedb.tech',
-            user: 'freedb_podijonz',
-            password: 'jEBMk2@ey9W4cWB',
-            database: 'freedb_credit-wallet'
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASS,
+            database: process.env.DB_NAME,
         },
         migrations: {
             directory: './migrations',
