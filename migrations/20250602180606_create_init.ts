@@ -35,10 +35,21 @@ export async function up(knex: Knex): Promise<void> {
         table.date('value_date').notNullable();
         table.decimal('balance_after', 14, 2).notNullable();
     });
+
+    // Add this block inside your `up` function after the other table creations
+    await knex.schema.createTable('risk_profiles', (table) => {
+        table.increments('id').primary();
+        table.decimal('average_monthly_income', 14, 2).notNullable();
+        table.decimal('income_volatility', 5, 2).notNullable(); // 0.00 to 1.00
+        table.decimal('average_monthly_expenses', 14, 2).notNullable();
+        table.decimal('recurring_monthly_payments', 14, 2).notNullable();
+    });
+
 }
 
 export async function down(knex: Knex): Promise<void> {
     await knex.schema.dropTableIfExists('transactions');
     await knex.schema.dropTableIfExists('accounts');
     await knex.schema.dropTableIfExists('identities');
+    await knex.schema.dropTableIfExists('risk_profiles');
 }

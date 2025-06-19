@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import riskRoutes from './api/routes/risk_route';
 import scoringRoutes from './api/routes/scoring_route';
+import creditScoreRoutes from './api/routes/smartScore_route'
 import kycRoutes from './api/routes/kyc_route';
 import { errorHandler } from './utils/errorHandler';
 
@@ -13,6 +14,7 @@ app.use(cors());
 app.use('/api/risk', riskRoutes);
 app.use('/api/scoring', scoringRoutes);
 app.use('/api/kyc', kycRoutes);
+app.use('/api/cc', creditScoreRoutes);
 
 app.use(errorHandler);
 
