@@ -15,24 +15,18 @@ type RiskProfile = {
     activeLoanAmount: number;
     account_age_months: number;
    number_of_accounts: number;
-};
-
-const mockAnalyzeRisk = async (accessToken: string, accountId: string): Promise<RiskProfile> => {
-    // Simulate Open Banking derived data (replace with real Mono/Okra call in production)
-    return {
-        avg_monthly_income: 550000,
-        income_volatility: 0.1, // Lower is better
-        monthly_expenses: 330000,
-        overdraft_count_90_days: 1,
-        recurring_payments: [
-            { type: 'rent', frequency: 'monthly', successRate: 1.0 },
-            { type: 'power', frequency: 'monthly', successRate: 0.95 }
-        ],
-        loan_repayment: 40000,
-        activeLoanAmount: 250000,
-        account_age_months: 18,
-       number_of_accounts: 2
+   categorySpend: Record<string, number>;  // monthly spend per category
+    savingPlan?: {
+        goal: number;
+        savedSoFar: number;
+        targetDate: string;
     };
+    creditBuilderHistory?: {
+        borrowedAmount: number;
+        repaidOnTime: boolean;
+        repaymentDate: string;
+    }[];
+
 };
 
 export const calculateSmartScore = async (accessToken: string, bvn: string) => {
@@ -79,6 +73,21 @@ export const calculateSmartScore = async (accessToken: string, bvn: string) => {
     const ageScore = account_age_months >= 24 ? 90 : account_age_months >= 12 ? 75 : 50;
     const diversityBonus =number_of_accounts > 1 ? 10 : 0;
     const accountProfileScore = ageScore + diversityBonus;
+
+    // fetch saving + loan data
+    const plan = await db.first().from('saving_plans').where({ account_number });
+    const loans = await db.select().from('credit_builder_loans')
+        .where({ account_number });
+
+// Saving plan score
+    let savingScore = 0;
+    if (plan) {
+        savingScore = Math.min(plan.saved_amount / plan.goal_amount, 1) * 20;
+    }
+
+// On-time repayment score
+    const onTimeRepays = loans.filter(l => l.repaid && new Date(l.repaid_date) <= new Date(l.due_date)).length;
+    const repayScore = Math.min(onTimeRepays / loans.length, 1) * 15;
 
     // 🔢 Final Weighted Score (like FICO)
     const finalRawScore =
