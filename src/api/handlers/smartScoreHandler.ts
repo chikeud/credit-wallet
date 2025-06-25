@@ -75,9 +75,9 @@ export const calculateSmartScore = async (accessToken: string, bvn: string) => {
     const accountProfileScore = ageScore + diversityBonus;
 
     // fetch saving + loan data
-    const plan = await db.first().from('saving_plans').where({ account_number });
+    const plan = await db.first().from('saving_plans').where({ bvn });
     const loans = await db.select().from('credit_builder_loans')
-        .where({ account_number });
+        .where({ bvn });
 
 // Saving plan score
     let savingScore = 0;
@@ -118,6 +118,24 @@ export const calculateSmartScore = async (accessToken: string, bvn: string) => {
 };
 
 export const smartScoreHandler = async (req: Request, res: Response) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Missing or invalid Authorization header' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    const { bvn } = req.params;
+
+    try {
+        const result = await calculateSmartScore(token, bvn);
+        res.json(result);
+    } catch (err) {
+        //res.json(err);
+        res.status(500).json({ error: 'Smart scoring failed', details: err });
+    }
+};
+export const pfmHandler = async (req: Request, res: Response) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
