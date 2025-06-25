@@ -31,6 +31,7 @@ export async function up(knex: Knex): Promise<void> {
         table.enu('debit_credit', ['DEBIT', 'CREDIT']).notNullable();
         table.string('narration').notNullable();
         table.string('reference').notNullable();
+        table.string('category');
         table.timestamp('transaction_time').notNullable();
         table.date('value_date').notNullable();
         table.decimal('balance_after', 14, 2).notNullable();

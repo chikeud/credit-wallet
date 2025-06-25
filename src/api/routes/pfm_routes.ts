@@ -56,7 +56,7 @@ router.post('/credit-builder/:id/repay', async (req, res) => {
 });
 
 // Fetch PFM data
-router.get('/pfm/:bvn', async (req, res) => {
+router.get('/:bvn', async (req, res) => {
     const { bvn } = req.params;
 
     try {
